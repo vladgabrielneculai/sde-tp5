@@ -1,5 +1,5 @@
-use std::{io::stdin, os::unix::process::parent_id};
-use nix::{sys::wait::waitpid,unistd::{fork, ForkResult, write,getpid,getppid}};
+use std::{io::stdin, os::unix::process::parent_id, thread,time};
+use nix::{sys::wait::waitpid,unistd::{fork, ForkResult, write, Pid, getpid, getppid}};
 
 fn main() {
 
@@ -21,6 +21,7 @@ fn main() {
         }
         Ok(ForkResult::Child) => {
             // Unsafe to use `println!` (or `unwrap`) here. See Safety.
+            thread::sleep(time::Duration::from_secs(3));
             println!("I am the child with PID: {}, and my parent has PID: {}",getpid(),getppid());
         }
         Err(_) => println!("Fork failed"),
